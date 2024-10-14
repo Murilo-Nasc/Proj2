@@ -53,6 +53,7 @@ void criar_player(Player *info_player) {
   info_player->exp_max = 100;
   info_player->exp_atual = 0;
   info_player->ataque = 5;
+  info_player->andar = 1;
   salvar_player(info_player);
 }
 

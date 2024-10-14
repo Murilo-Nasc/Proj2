@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h> 
 #include "funcoes.h"
 
 int main(void) {
@@ -22,6 +21,7 @@ int main(void) {
       case 1:
         criar_player(&info_player);
         break;
+      
       case 2:
         if (info_player.lvl == -1) {
           printf("Não há jogo salvo.\n");
@@ -30,9 +30,11 @@ int main(void) {
         else {
           break;
         }
+      
       case 3:
         printf("Saindo...\n");
         return 0;
+      
       default:
         printf("Opção Inválida.\n");
         continue;
@@ -41,6 +43,8 @@ int main(void) {
   }
 
   system("clear");
+
+  
 
   return 0;
 }

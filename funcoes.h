@@ -12,6 +12,7 @@ typedef struct {
   float exp_max;
   float exp_atual;
   int ataque;
+  int andar;
 } Player;
 
 void salvar_player(Player *info_player);

@@ -1,23 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "funcoes.h"
 
 int main(void) {
   int opcao;
+  char lixo;
+  Player info_player;
+  info_player.lvl = -1; // Salva um nível padrão -1 para futura verificação da existência de um player salvo
+
+  carregar_player(&info_player);
+
 
   printf("BEM VINDO AO RPG\n");
-
   while (1){
     printf("1. Começar Uma Nova Jornada\n2. Continuar Sua Jornada\n3. Sair\n");
     scanf("%d", &opcao);
+    scanf("%c", &lixo);
 
     switch (opcao){
       case 1:
+        criar_player(&info_player);
         break;
+      
       case 2:
-        break;
+        if (info_player.lvl == -1) {
+          printf("Não há jogo salvo.\n");
+          continue;
+        }
+        else {
+          break;
+        }
+      
       case 3:
         printf("Saindo...\n");
         return 0;
+      
       default:
         printf("Opção Inválida.\n");
         continue;
@@ -26,6 +43,8 @@ int main(void) {
   }
 
   system("clear");
+
+  
 
   return 0;
 }

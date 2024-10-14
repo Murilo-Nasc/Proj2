@@ -5,6 +5,7 @@
 
 int main(void) {
   int opcao;
+  char lixo;
   Player info_player;
   info_player.lvl = -1; // Salva um nível padrão -1 para futura verificação da existência de um player salvo
 
@@ -15,9 +16,11 @@ int main(void) {
   while (1){
     printf("1. Começar Uma Nova Jornada\n2. Continuar Sua Jornada\n3. Sair\n");
     scanf("%d", &opcao);
+    scanf("%c", &lixo);
 
     switch (opcao){
       case 1:
+        criar_player(&info_player);
         break;
       case 2:
         if (info_player.lvl == -1) {

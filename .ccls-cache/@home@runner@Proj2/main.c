@@ -7,13 +7,15 @@ int main(void) {
   printf("BEM VINDO AO RPG\n");
 
   while (1){
-    printf("1. Começar Sua Jornada\n2. Sair\n");
+    printf("1. Começar Uma Nova Jornada\n2. Continuar Sua Jornada\n3. Sair\n");
     scanf("%d", &opcao);
-    
+
     switch (opcao){
       case 1:
         break;
       case 2:
+        break;
+      case 3:
         printf("Saindo...\n");
         return 0;
       default:
@@ -22,7 +24,7 @@ int main(void) {
     }
     break;
   }
-  
+
   system("clear");
 
   return 0;

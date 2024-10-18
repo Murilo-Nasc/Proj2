@@ -25,6 +25,7 @@ typedef struct {
     float vida_max;
     float vida_atual;
     int ataque;
+    int exp;
 } Inimigo;
 
 // ARQUIVAMENTO DO PLAYER
@@ -32,7 +33,7 @@ void salvar_player(Player *info_player);
 void carregar_player(Player *info_player);
 void criar_player(Player *info_player);
 // COMBATE
-Inimigo criar_inimigo(int tipo);
+Inimigo criar_inimigo(int tipo, Player player);
 void combate(Player *player);
 void atacar(Player *jogador, Inimigo *inimigo, int acao_inimigo);
 void ataque_inim(Inimigo *inimigo, Player *player, int defesa_player);

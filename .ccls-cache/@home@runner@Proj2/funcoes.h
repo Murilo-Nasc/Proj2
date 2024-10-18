@@ -33,5 +33,7 @@ void combate(Player *player);
 void atacar(Player *jogador, Inimigo *inimigo, int acao_inimigo);
 void ataque_inim(Inimigo *inimigo, Player *player, int defesa_player);
 void usar_pocao(Player *player);
+int* gerar_encontros(int *total_encontros);
+void embaralhar(int *array, int tamanho);
 
 #endif

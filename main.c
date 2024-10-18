@@ -23,7 +23,7 @@ int main(void) {
       case 1:
         criar_player(&info_player);
         break;
-      
+
       case 2:
         if (info_player.lvl == -1) {
           printf("Não há jogo salvo.\n");
@@ -32,11 +32,11 @@ int main(void) {
         else {
           break;
         }
-      
+
       case 3:
         printf("Saindo...\n");
         return 0;
-      
+
       default:
         printf("Opção Inválida.\n");
         continue;
@@ -49,7 +49,7 @@ int main(void) {
     printf("\nANDAR %d\n\n", info_player.andar);
     int total_encontros, morte = 0;
     int *encontros = gerar_encontros(&total_encontros);
-    
+
     for (int i = 0; i < total_encontros; i++) {
       if (encontros[i] == 1) {
         combate(&info_player);

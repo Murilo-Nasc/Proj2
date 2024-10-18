@@ -33,7 +33,7 @@ void carregar_player(Player *info_player) {
     return;
   }
   fseek(file, 0, SEEK_SET);
-  
+
   fread(info_player, sizeof(Player), 1, file);
   fclose(file);
 }
@@ -42,7 +42,7 @@ void carregar_player(Player *info_player) {
 // Criar Player
 void criar_player(Player *info_player) {
   char nome_player[50];
-  
+
   printf("Digite o nome do seu personagem: \n");
   fgets(nome_player, sizeof(nome_player), stdin);
   nome_player[strcspn(nome_player, "\n")] = '\0';
@@ -67,39 +67,40 @@ void criar_player(Player *info_player) {
 
 
 // Criar Inimigo
-Inimigo criar_inimigo(int tipo) {
+Inimigo criar_inimigo(int tipo, Player player) {
   Inimigo inimigo;
+  double poder = pow(1.05, player.andar);
 
   switch (tipo) {
     case 1: // Goblin
       strcpy(inimigo.nome, "Goblin");
-      inimigo.vida_max = 30;
-      inimigo.vida_atual = 30;
-      inimigo.ataque = 4;
+      inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 10 + 25) * poder);
+      inimigo.ataque = 4 * poder;
+      inimigo.exp = (int)((rand() % 10 + 10) * poder);
       break;
     case 2: // Slime
       strcpy(inimigo.nome, "Slime");
-      inimigo.vida_max = 25;
-      inimigo.vida_atual = 25;
-      inimigo.ataque = 3;
+      inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 10 + 20) * poder);
+      inimigo.ataque = 3 * poder;
+      inimigo.exp = (int)((rand() % 10 + 10) * poder);
       break;
     case 3: // Lobo
       strcpy(inimigo.nome, "Lobo");
-      inimigo.vida_max = 25;
-      inimigo.vida_atual = 25;
-      inimigo.ataque = 6;
+      inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 10 + 20) * poder);
+      inimigo.ataque = 6 * poder;
+      inimigo.exp = (int)((rand() % 15 + 10) * poder);
       break;
     case 4: // Esqueleto
       strcpy(inimigo.nome, "Esqueleto");
-      inimigo.vida_max = 35;
-      inimigo.vida_atual = 35;
-      inimigo.ataque = 5;
+      inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 10 + 30) * poder);
+      inimigo.ataque = 4 * poder;
+      inimigo.exp = (int)((rand() % 20 + 10) * poder);
       break;
     case 5: // Zumbi
       strcpy(inimigo.nome, "Zumbi");
-      inimigo.vida_max = 40;
-      inimigo.vida_atual = 40;
-      inimigo.ataque = 4;
+      inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 10 + 35) * poder);
+      inimigo.ataque = 3 * poder;
+      inimigo.exp = (int)((rand() % 10 + 10) * poder);
       break;
   }
 
@@ -110,9 +111,9 @@ Inimigo criar_inimigo(int tipo) {
 // Combate
 void combate(Player *player) {
   int opcao_inimigo = rand() % 5 + 1; // Entre 1 e 5
-  Inimigo inimigo_atual = criar_inimigo(opcao_inimigo);
+  Inimigo inimigo_atual = criar_inimigo(opcao_inimigo, *player);
   printf("\nVocê encontrou um %s!\n", inimigo_atual.nome);
-  
+
   while (1) {
     printf("\nSua vida: %.2f/%.2f\n", player->vida_atual, player->vida_max);
     printf("Vida do %s: %.2f/%.2f\n", inimigo_atual.nome, inimigo_atual.vida_atual, inimigo_atual.vida_max);
@@ -125,9 +126,9 @@ void combate(Player *player) {
     char lixo;
     scanf("%d", &acao);
     scanf("%c", &lixo);
-    
+
     acao_inimigo = rand() % 2 + 1; // Escolhe entre atacar (1) ou defender (2)
-    
+
     switch (acao) {
       case 1:
         atacar(player, &inimigo_atual, acao_inimigo);
@@ -144,7 +145,7 @@ void combate(Player *player) {
           printf("Você não tem poções!\n");
           continue;
         }
-       
+
       default:
         printf("Ação inválida! Tente novamente.\n");
         continue;
@@ -152,9 +153,15 @@ void combate(Player *player) {
 
     if (inimigo_atual.vida_atual <= 0) {
       printf("\nVocê derrotou o %s!\n", inimigo_atual.nome);
+      printf("EXP ganho: %d\n", inimigo_atual.exp);
+      player->exp_atual += inimigo_atual.exp;
+      if (player->exp_atual >= player->exp_max) {
+        upar_lvl(player);
+      } 
+      printf("\nEXP atual: %.2f/%.2f\n", player->exp_atual, player->exp_max);
       break;
     }
-    
+
     if (acao_inimigo == 1) {
       ataque_inim(&inimigo_atual, player, defesa_player);
     } else if (acao_inimigo == 2) {
@@ -165,7 +172,7 @@ void combate(Player *player) {
       printf("\nVocê foi derrotado pelo %s!\n", inimigo_atual.nome);
       break;
     }
-    
+
   }
 }
 
@@ -262,10 +269,10 @@ void bau(Player *player){
     printf("Você encontrou uma poção de cura!\n");
     player->pocoes++;
   } else if (item <= 10 && item > 7) {
-    nova_espada = (int)(rand() % 3 + 3) * pow(1.2, player->andar);
+    nova_espada = (int)(rand() % 3 + 3) * pow(1.05, player->andar);
     printf("Você encontrou uma espada! (Dano = %d)\n", nova_espada);
     printf("Deseja trocar sua espada (Dano = %d) por esta?\n1. Sim\n2. Não\n", player->dano_espada);
-    
+
     while (1) {
       scanf("%d", &opcao);
       scanf("%c", &lixo);
@@ -282,7 +289,17 @@ void bau(Player *player){
         printf("Opção inválida!\n");
       }
     }
-  
+
   }
 
+}
+
+void upar_lvl(Player *player) {
+  player->lvl++;
+  player->exp_atual -= player->exp_max;
+  player->exp_max = (int)(player->exp_max * 1.2);
+  player->vida_max += 5;
+  player->vida_atual = player->vida_max;
+  player->ataque += 1;
+  printf("\nParabéns! Você subiu para o nível %d!\n", player->lvl);
 }

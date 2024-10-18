@@ -65,6 +65,7 @@ int main(void) {
       }
     }
     if (morte) {
+      funcao_morte();
       break;
     }
     printf("Andar Concluído!\n");
@@ -78,6 +79,7 @@ int main(void) {
       info_player.andar++;
       salvar_player(&info_player);
       printf("Adeus!");
+      break;
     }
   }
 

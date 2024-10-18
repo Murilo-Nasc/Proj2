@@ -1,6 +1,8 @@
 #include "funcoes.h" 
 
-// FUNÇÕES DE ARQUIVAMENTO DE PLAYER
+
+// ARQUIVAMENTO DO PLAYER
+
 
 // Salvar Player
 void salvar_player(Player *info_player) {
@@ -109,6 +111,7 @@ Inimigo criar_inimigo(int tipo) {
   return inimigo;
 }
 
+
 // Combate
 void combate(Player *player) {
   int opcao_inimigo = rand() % 5 + 1; // Entre 1 e 5
@@ -171,6 +174,7 @@ void combate(Player *player) {
   }
 }
 
+
 // Atacar
 void atacar(Player *jogador, Inimigo *inimigo, int acao_inimigo) {
   int dano_jogador = jogador->ataque + rand() % jogador->ataque;
@@ -180,6 +184,7 @@ void atacar(Player *jogador, Inimigo *inimigo, int acao_inimigo) {
   inimigo->vida_atual -= dano_jogador;
   printf("Você atacou o %s e causou %d de dano!\n", inimigo->nome, dano_jogador);
 }
+
 
 // Ataque Inimigo
 void ataque_inim(Inimigo *inimigo, Player *player, int defesa_player) {
@@ -191,10 +196,11 @@ void ataque_inim(Inimigo *inimigo, Player *player, int defesa_player) {
   printf("O %s atacou você e causou %d de dano!\n", inimigo->nome, dano_inimigo);
 }
 
+
 // Usar Poção
 void usar_pocao(Player *player) {
   player->pocoes -= 1;
-  player-> vida_atual = (int)(player->vida_atual *= 1.5); // Recupera metade da vida
+  player->vida_atual = player->vida_atual + (int)(player->vida_max * 0.5); // Recupera metade da vida
   if (player->vida_atual > player->vida_max) {
     player->vida_atual = player->vida_max;
   }
@@ -202,7 +208,8 @@ void usar_pocao(Player *player) {
 }
 
 
-// ANDARES
+// ANDARES/ENCONTROS
+
 
 // Geração de Encontros
 int* gerar_encontros(int *total_encontros) {
@@ -224,10 +231,10 @@ int* gerar_encontros(int *total_encontros) {
     encontros[i] = 2; // baú
   }
 
-  // Embaralhar os encontros
   embaralhar(encontros, *total_encontros);
   return encontros;
 }
+
 
 // Embaralhar os Encontros
 void embaralhar(int *array, int tamanho) {
@@ -239,3 +246,13 @@ void embaralhar(int *array, int tamanho) {
     }
 }
 
+
+// Morte
+void funcao_morte() {
+  FILE *file = fopen("player.bin", "wb");
+  if (file) {
+    fclose(file); 
+  } else {
+    perror("Erro ao abrir o arquivo do jogador para esvaziar");
+  }
+}

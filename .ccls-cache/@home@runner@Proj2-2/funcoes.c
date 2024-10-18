@@ -153,6 +153,12 @@ void combate(Player *player) {
 
     if (inimigo_atual.vida_atual <= 0) {
       printf("\nVocê derrotou o %s!\n", inimigo_atual.nome);
+      printf("EXP ganho: %d\n", inimigo_atual.exp);
+      player->exp_atual += inimigo_atual.exp;
+      if (player->exp_atual >= player->exp_max) {
+        upar_lvl(player);
+      } 
+      printf("\nEXP atual: %.2f/%.2f\n", player->exp_atual, player->exp_max);
       break;
     }
 
@@ -286,4 +292,14 @@ void bau(Player *player){
 
   }
 
+}
+
+void upar_lvl(Player *player) {
+  player->lvl++;
+  player->exp_atual -= player->exp_max;
+  player->exp_max = (int)(player->exp_max * 1.2);
+  player->vida_max += 5;
+  player->vida_atual = player->vida_max;
+  player->ataque += 1;
+  printf("\nParabéns! Você subiu para o nível %d!\n", player->lvl);
 }

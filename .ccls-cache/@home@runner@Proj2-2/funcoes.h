@@ -43,5 +43,6 @@ int* gerar_encontros(int *total_encontros);
 void embaralhar(int *array, int tamanho);
 void funcao_morte();
 void bau(Player *player);
+void upar_lvl(Player *player);
 
 #endif

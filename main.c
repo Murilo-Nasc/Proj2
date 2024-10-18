@@ -44,13 +44,44 @@ int main(void) {
     break;
   }
 
-  // LUTA
+  // EXPLORAÇÃO
   while (1) {
-    combate(&info_player);
-    if (info_player.vida_atual <= 0) {
-      printf("Você morreu!\n");
+    printf("\nANDAR %d\n\n", info_player.andar);
+    int total_encontros, morte = 0;
+    int *encontros = gerar_encontros(&total_encontros);
+    
+    for (int i = 0; i < total_encontros; i++) {
+      if (encontros[i] == 1) {
+        combate(&info_player);
+        if (info_player.vida_atual <= 0) {
+          printf("Você morreu!\n");
+          morte = 1;
+          break;
+        }
+      } 
+      else if (encontros[i] == 2) {
+        printf("Bau!\n");
+        //Lógica do baú
+      }
+    }
+    if (morte) {
+      funcao_morte();
+      break;
+    }
+    printf("Andar Concluído!\n");
+    printf("Deseja continuar?\n1. Sim\n2. Não\n");
+    scanf("%d", &opcao);
+    if (opcao == 1) {
+      info_player.andar++;
+      printf("Seguindo ao próximo andar...\n");
+    }
+    else if (opcao == 2) {
+      info_player.andar++;
+      salvar_player(&info_player);
+      printf("Adeus!");
       break;
     }
   }
+
   return 0;
 }

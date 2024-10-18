@@ -12,12 +12,12 @@ int main(void) {
 
 
   printf("BEM VINDO AO RPG\n");
-  while (1){
+  while (1) {
     printf("1. Começar Uma Nova Jornada\n2. Continuar Sua Jornada\n3. Sair\n");
     scanf("%d", &opcao);
     scanf("%c", &lixo);
 
-    switch (opcao){
+    switch (opcao) {
       case 1:
         criar_player(&info_player);
         break;
@@ -44,6 +44,8 @@ int main(void) {
 
   system("clear");
 
+  // LUTA
+  
   
 
   return 0;

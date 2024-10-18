@@ -42,11 +42,12 @@ void criar_player(Player *info_player) {
   char nome_player[50];
   
   printf("Digite o nome do seu personagem: \n");
-  fgets(nome_player, 50, stdin);
+  fgets(nome_player, sizeof(nome_player), stdin);
   nome_player[strcspn(nome_player, "\n")] = '\0';
 
   // Salva infos novas no info_player
-  strncpy(info_player->nome, nome_player, sizeof(info_player->nome));
+  strncpy(info_player->nome, nome_player, sizeof(info_player->nome) - 1);
+  info_player->nome[sizeof(info_player->nome) - 1] = '\0';
   info_player->vida_max = 50;
   info_player->vida_atual = 50;
   info_player->lvl = 1;

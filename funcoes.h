@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
 
 typedef struct {
   char nome[50];
@@ -26,5 +28,8 @@ void salvar_player(Player *info_player);
 void carregar_player(Player *info_player);
 void criar_player(Player *info_player);
 Inimigo criar_inimigo(int tipo);
+void combate(Player *player);
+void atacar(Player *jogador, Inimigo *inimigo, int acao_inimigo);
+void ataque_inim(Inimigo *inimigo, Player *player, int defesa_player);
 
 #endif

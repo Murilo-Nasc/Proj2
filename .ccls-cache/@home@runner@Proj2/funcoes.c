@@ -55,6 +55,7 @@ void criar_player(Player *info_player) {
   info_player->exp_atual = 0;
   info_player->ataque = 5;
   info_player->andar = 1;
+  info_player->pocoes = 3;
   salvar_player(info_player);
 }
 
@@ -135,10 +136,17 @@ void combate(Player *player) {
         break;
       case 2:
         defesa_player = 1;
+        printf("Você se defendeu!\n");
         break;
       case 3:
-        // Lógica de poção
-        break;
+        if (player->pocoes > 0) {
+          usar_pocao(player);
+          break;
+        } else {
+          printf("Você não tem poções!\n");
+          continue;
+        }
+       
       default:
         printf("Ação inválida! Tente novamente.\n");
         continue;
@@ -181,4 +189,14 @@ void ataque_inim(Inimigo *inimigo, Player *player, int defesa_player) {
   }
   player->vida_atual -= dano_inimigo;
   printf("O %s atacou você e causou %d de dano!\n", inimigo->nome, dano_inimigo);
+}
+
+// Usar Poção
+void usar_pocao(Player *player) {
+  player->pocoes -= 1;
+  player-> vida_atual = (int)(player->vida_atual *= 1.5); // Recupera metade da vida
+  if (player->vida_atual > player->vida_max) {
+    player->vida_atual = player->vida_max;
+  }
+  printf("Você usou uma poção e recuperou vida! Vida atual: %.2f/%.2f\n", player->vida_atual, player->vida_max);
 }

@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "funcoes.h"
 
 int main(void) {
-  int opcao;
+  int opcao, opcao_inimigo;
   char lixo;
   Player info_player;
   info_player.lvl = -1; // Salva um nível padrão -1 para futura verificação da existência de um player salvo
+  srand(time(NULL));
 
   carregar_player(&info_player);
 
@@ -42,11 +44,13 @@ int main(void) {
     break;
   }
 
-  system("clear");
-
   // LUTA
-  
-  
-
+  while (1) {
+    combate(&info_player);
+    if (info_player.vida_atual <= 0) {
+      printf("Você morreu!\n");
+      break;
+    }
+  }
   return 0;
 }

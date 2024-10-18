@@ -25,5 +25,6 @@ typedef struct {
 void salvar_player(Player *info_player);
 void carregar_player(Player *info_player);
 void criar_player(Player *info_player);
+Inimigo criar_inimigo(int tipo);
 
 #endif

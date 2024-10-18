@@ -58,3 +58,49 @@ void criar_player(Player *info_player) {
   salvar_player(info_player);
 }
 
+Inimigo criar_inimigo(int tipo) {
+  Inimigo inimigo;
+
+  switch (tipo) {
+    case 1: // Goblin
+      strcpy(inimigo.nome, "Goblin");
+      inimigo.vida_max = 30;
+      inimigo.vida_atual = 30;
+      inimigo.ataque = 5;
+      break;
+    case 2: // Slime
+      strcpy(inimigo.nome, "Slime");
+      inimigo.vida_max = 20;
+      inimigo.vida_atual = 20;
+      inimigo.ataque = 3;
+      break;
+    case 3: // Lobo
+      strcpy(inimigo.nome, "Lobo");
+      inimigo.vida_max = 25;
+      inimigo.vida_atual = 25;
+      inimigo.ataque = 4;
+      break;
+    case 4: // Esqueleto
+      strcpy(inimigo.nome, "Esqueleto");
+      inimigo.vida_max = 35;
+      inimigo.vida_atual = 35;
+      inimigo.ataque = 6;
+      break;
+    case 5: // Zumbi
+      strcpy(inimigo.nome, "Zumbi");
+      inimigo.vida_max = 40;
+      inimigo.vida_atual = 40;
+      inimigo.ataque = 7;
+      break;
+    default:
+      strcpy(inimigo.nome, "Desconhecido");
+      inimigo.vida_max = 0;
+      inimigo.vida_atual = 0;
+      inimigo.ataque = 0;
+      break;
+  }
+
+  return inimigo;
+}
+
+

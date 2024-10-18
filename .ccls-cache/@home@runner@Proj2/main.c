@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "funcoes.h"
 
 int main(void) {
-  int opcao;
+  int opcao, opcao_inimigo;
   char lixo;
   Player info_player;
+  Inimigo inimigo_atual;
   info_player.lvl = -1; // Salva um nível padrão -1 para futura verificação da existência de um player salvo
+  srand(time(NULL));
 
   carregar_player(&info_player);
 
@@ -45,8 +48,9 @@ int main(void) {
   system("clear");
 
   // LUTA
+  opcao_inimigo = rand() % 5 + 1; // Entre 1 e 5
+  inimigo_atual = criar_inimigo(opcao_inimigo);
+  printf("Você encontrou um %s!\n", inimigo_atual.nome);
   
-  
-
   return 0;
 }

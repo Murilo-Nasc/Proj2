@@ -170,6 +170,7 @@ void combate(Player *player) {
 
     if (player->vida_atual <= 0) {
       printf("\nVocê foi derrotado pelo %s!\n", inimigo_atual.nome);
+      historico(player, inimigo_atual.nome);
       break;
     }
 
@@ -258,7 +259,6 @@ void funcao_morte() {
   }
 }
 
-
 // Baú
 void bau(Player *player){
   int opcao, item, nova_espada;
@@ -267,6 +267,8 @@ void bau(Player *player){
   item = rand() % 10 + 1;
   if (item > 0 && item <= 6) {
     printf("Você encontrou uma poção de cura!\n");
+    printf("\nAperte Enter para prosseguir: \n");
+    getchar();
     player->pocoes++;
   } else if (item <= 10 && item > 6) {
     nova_espada = (int)(rand() % 2 + 4) * pow(1.05, player->andar);
@@ -304,6 +306,8 @@ void upar_lvl(Player *player) {
   player->vida_atual = player->vida_max;
   player->ataque += 1;
   printf("\nParabéns! Você subiu para o nível %d!\n", player->lvl);
+  printf("\nAperte Enter para prosseguir: \n");
+  getchar();
 }
 
 
@@ -407,6 +411,7 @@ void combate_criatura_abismo(Inimigo inimigo, Player *player) {
       
     if (player->vida_atual <= 0) {
       printf("\nVocê foi derrotado pelo %s!\n", inimigo.nome);
+      historico(player, inimigo.nome);
       break;
     }
   }
@@ -485,6 +490,7 @@ void combate_maquina_combate(Inimigo inimigo, Player *player) {
     
     if (player->vida_atual <= 0) {
       printf("\nVocê foi derrotado pelo %s!\n", inimigo.nome);
+      historico(player, inimigo.nome);
       break;
     }
 
@@ -580,8 +586,53 @@ void combate_colosso_mortovivo(Inimigo inimigo, Player *player) {
 
     if (player->vida_atual <= 0) {
       printf("\nVocê foi derrotado pelo %s!\n", inimigo.nome);
+      historico(player, inimigo.nome);
       break;
     }
     
   }
+}
+
+
+// TXT
+
+
+// Histórico 
+void historico(Player *player, char inimigo[]){
+  FILE *arquivo;
+  arquivo = fopen("historico.txt", "a");
+  time_t t = time(NULL);
+  struct tm *data = localtime(&t);
+  char data_hoje[11];
+  strftime(data_hoje, sizeof(data_hoje), "%d/%m/%Y", data);
+  fprintf(arquivo, "Jogador: %s / Nível: %d / Andar: %d / Morto por: %s em %s\n", player->nome, player->lvl, player->andar, inimigo, data_hoje);
+  fclose(arquivo);
+}
+
+
+// Consultar histórico
+void consultar_historico(){
+  FILE *arquivo;
+  arquivo = fopen("historico.txt", "r");
+  if (arquivo == NULL) {
+    printf("Erro ao abrir o arquivo!\n");
+    return;
+  }
+  char **linhas = NULL;
+  char linha[1000];
+  int qtdLinhas = 0;
+  while (fgets(linha, sizeof(linha), arquivo) != NULL) {
+    linhas = realloc(linhas, sizeof(char*) * (qtdLinhas + 1));
+    linhas[qtdLinhas] = strdup(linha);
+    qtdLinhas++;
+  }
+  fclose(arquivo);
+
+  for (int i = qtdLinhas - 1; i >= 0; i--) {
+    printf("%s", linhas[i]);
+    free(linhas[i]);
+  }
+  free(linhas);
+  printf("\nAperte Enter para voltar ao Menu: \n");
+  getchar();
 }

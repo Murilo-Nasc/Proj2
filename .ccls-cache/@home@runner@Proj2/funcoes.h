@@ -49,5 +49,7 @@ void criar_boss(Player *player);
 void combate_criatura_abismo(Inimigo inimigo, Player *player);
 void combate_maquina_combate(Inimigo inimigo, Player *player);
 void combate_colosso_mortovivo(Inimigo inimigo, Player *player);
-
+// HISTÓRICO
+void historico(Player *player, char inimigo[]);
+void consultar_historico();
 #endif

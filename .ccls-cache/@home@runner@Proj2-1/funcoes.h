@@ -47,6 +47,6 @@ void upar_lvl(Player *player);
 // BOSS
 void criar_boss(Player *player);
 void combate_criatura_abismo(Inimigo inimigo, Player *player);
-
+void combate_maquina_combate(Inimigo inimigo, Player *player);
 
 #endif

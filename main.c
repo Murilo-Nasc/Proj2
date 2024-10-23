@@ -4,7 +4,7 @@
 #include "funcoes.h"
 
 int main(void) {
-  int opcao, opcao_inimigo;
+  int opcao, opcao_inimigo, opcao_continuar;
   char lixo;
   Player info_player;
   info_player.lvl = -1; // Salva um nível padrão -1 para futura verificação da existência de um player salvo
@@ -46,8 +46,8 @@ int main(void) {
 
   // EXPLORAÇÃO
   while (1) {
-    printf("\nANDAR %d\n\n", info_player.andar);
-    int total_encontros, morte = 0;
+    printf("\nANDAR %d\n", info_player.andar);
+    int total_encontros;
     int *encontros = gerar_encontros(&total_encontros);
 
     // Andar de Boss
@@ -60,8 +60,6 @@ int main(void) {
       if (encontros[i] == 1) {
         combate(&info_player);
         if (info_player.vida_atual <= 0) {
-          printf("Você morreu!\n");
-          morte = 1;
           break;
         }
       } 
@@ -70,21 +68,23 @@ int main(void) {
         //Lógica do baú
       }
     }
-    
-    if (morte) {
+
+    if (info_player.vida_atual <= 0) {
+      printf("Você morreu!\n");
       funcao_morte();
       break;
     }
-    printf("Andar Concluído!\n");
+      
+    printf("Andar Concluído!\n");1
     printf("Deseja continuar?\n1. Sim\n2. Não\n");
-    scanf("%d", &opcao);
+    scanf("%d", &opcao_continuar);
     }
 
-    if (opcao == 1) {
+    if (opcao_continuar == 1) {
       info_player.andar++;
       printf("Seguindo ao próximo andar...\n");
     }
-    else if (opcao == 2) {
+    else if (opcao_continuar == 2) {
       info_player.andar++;
       salvar_player(&info_player);
       printf("Adeus!");

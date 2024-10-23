@@ -214,8 +214,8 @@ void usar_pocao(Player *player) {
 
 // Geração de Encontros
 int* gerar_encontros(int *total_encontros) {
-  int num_combates = rand() % 3 + 3; // Entre 3 e 5
-  int num_baus = rand() % 2 + 1;      // Entre 1 e 2
+  int num_combates = rand() % 3 + 4; // Entre 4 e 6
+  int num_baus = rand() % 3 + 1;      // Entre 1 e 3
   *total_encontros = num_combates + num_baus;
 
   // Alocar memória para os encontros
@@ -313,7 +313,7 @@ void upar_lvl(Player *player) {
 // Criar Boss
 void criar_boss(Player *player) {
   Inimigo inimigo;
-  int tipo = 1;
+  int tipo = 2;
   double poder = pow(1.05, player->andar);
 
   switch (tipo) {
@@ -326,9 +326,10 @@ void criar_boss(Player *player) {
       break;
     case 2: // Máquina de Combate
       strcpy(inimigo.nome, "Máquina de Combate");
-      inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 25 + 100) * poder);
-      inimigo.ataque = 3 * poder;
-      inimigo.exp = (int)((rand() % 10 + 10) * poder);
+      inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 25 + 150) * poder);
+      inimigo.ataque = 4 * poder;
+      inimigo.exp = (int)((rand() % 20 + 40) * poder);
+      combate_maquina_combate(inimigo, player);
       break;
     case 3: // Apóstolo
       strcpy(inimigo.nome, "Apóstolo");
@@ -339,6 +340,8 @@ void criar_boss(Player *player) {
   }
 }
 
+
+// Combate da Criatura do Abismo
 void combate_criatura_abismo(Inimigo inimigo, Player *player) {
   int ataque_max = 20 + pow(1.05, player->andar);
   float variacao_ataque = inimigo.ataque;
@@ -388,6 +391,8 @@ void combate_criatura_abismo(Inimigo inimigo, Player *player) {
         upar_lvl(player);
       } 
       printf("\nEXP atual: %.2f/%.2f\n", player->exp_atual, player->exp_max);
+      bau(player);
+      bau(player);
       break;
     }
 
@@ -402,6 +407,100 @@ void combate_criatura_abismo(Inimigo inimigo, Player *player) {
     if (player->vida_atual <= 0) {
       printf("\nVocê foi derrotado pelo %s!\n", inimigo.nome);
       break;
+    }
+  }
+}
+
+
+// Combate da Máquina de Combate
+void combate_maquina_combate(Inimigo inimigo, Player *player) {
+  int aquecimento = 3;
+  int superaquecida = 0;
+
+  printf("\nVocê encontrou um chefão: A Máquina de Combate!\n");
+
+  while (1) {
+    printf("\nSua vida: %.2f/%.2f\n", player->vida_atual, player->vida_max);
+    printf("Vida da %s: %.2f/%.2f\n", inimigo.nome, inimigo.vida_atual, inimigo.vida_max);
+    printf("\nEscolha uma ação:\n");
+    printf("1. Atacar\n");
+    printf("2. Defender\n");
+    printf("3. Usar Poção\n");
+
+    int acao, acao_inimigo, defesa_player = 0;
+    char lixo;
+    scanf("%d", &acao);
+    scanf("%c", &lixo);
+
+    if (superaquecida) {
+      acao_inimigo = 1;
+    } 
+    else {
+      acao_inimigo = rand() % 2 + 1; // Escolhe entre atacar (1) ou defender (2)
+    }
+    
+    switch (acao) {
+      case 1:
+        atacar(player, &inimigo, acao_inimigo);
+        break;
+      case 2:
+        defesa_player = 1;
+        printf("Você se defendeu!\n");
+        break;
+      case 3:
+        if (player->pocoes > 0) {
+          usar_pocao(player);
+          break;
+        } else {
+          printf("Você não tem poções!\n");
+          continue;
+        }
+
+      default:
+        printf("Ação inválida! Tente novamente.\n");
+        continue;
+    }
+
+    if (acao_inimigo == 1) {
+      ataque_inim(&inimigo, player, defesa_player);
+    } else if (acao_inimigo == 2) {
+      printf("O %s defendeu!\n", inimigo.nome);
+    }
+    
+    if (player->vida_atual <= 0) {
+      printf("\nVocê foi derrotado pelo %s!\n", inimigo.nome);
+      break;
+    }
+    
+    if (inimigo.vida_atual <= 0) {
+      printf("\nVocê derrotou a %s!\n", inimigo.nome);
+      printf("EXP ganho: %d\n", inimigo.exp);
+      player->exp_atual += inimigo.exp;
+      if (player->exp_atual >= player->exp_max) {
+        upar_lvl(player);
+      } 
+      printf("\nEXP atual: %.2f/%.2f\n", player->exp_atual, player->exp_max);
+      bau(player);
+      bau(player);
+      break;
+    }
+
+    if (player->vida_atual <= 0) {
+      printf("\nVocê foi derrotado pelo %s!\n", inimigo.nome);
+      break;
+    }
+
+    aquecimento--;
+    if (aquecimento == 0) {
+      superaquecida = 1;
+      inimigo.ataque *= 2.25; 
+      printf("A Máquina está superaquecida!\n");
+    }
+    if (aquecimento == -2) {
+      superaquecida = 0;
+      inimigo.ataque /= 2;
+      aquecimento = rand() % 3 + 2;
+      printf("A Máquina esfriou!\n");
     }
   }
 }

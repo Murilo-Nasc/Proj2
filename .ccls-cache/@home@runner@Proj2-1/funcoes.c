@@ -191,7 +191,7 @@ void atacar(Player *jogador, Inimigo *inimigo, int acao_inimigo) {
 void ataque_inim(Inimigo *inimigo, Player *player, int defesa_player) {
   int dano_inimigo = inimigo->ataque + rand() % inimigo->ataque;
   if (defesa_player) {
-    dano_inimigo = (int)(dano_inimigo / 1.5);
+    dano_inimigo = (int)(dano_inimigo / 1.6);
   }
   player->vida_atual -= dano_inimigo;
   printf("O %s atacou você e causou %d de dano!\n", inimigo->nome, dano_inimigo);
@@ -201,7 +201,7 @@ void ataque_inim(Inimigo *inimigo, Player *player, int defesa_player) {
 // Usar Poção
 void usar_pocao(Player *player) {
   player->pocoes -= 1;
-  player->vida_atual = player->vida_atual + (int)(player->vida_max * 0.5); // Recupera metade da vida
+  player->vida_atual += (int)(player->vida_max * 0.6); // Recupera metade da vida
   if (player->vida_atual > player->vida_max) {
     player->vida_atual = player->vida_max;
   }
@@ -215,7 +215,7 @@ void usar_pocao(Player *player) {
 // Geração de Encontros
 int* gerar_encontros(int *total_encontros) {
   int num_combates = rand() % 3 + 4; // Entre 4 e 6
-  int num_baus = rand() % 3 + 1;      // Entre 1 e 3
+  int num_baus = rand() % 2 + 2;      // Entre 2 e 3
   *total_encontros = num_combates + num_baus;
 
   // Alocar memória para os encontros
@@ -269,7 +269,7 @@ void bau(Player *player){
     printf("Você encontrou uma poção de cura!\n");
     player->pocoes++;
   } else if (item <= 10 && item > 7) {
-    nova_espada = (int)(rand() % 3 + 3) * pow(1.05, player->andar);
+    nova_espada = (int)(rand() % 2 + 4) * pow(1.05, player->andar);
     printf("Você encontrou uma espada! (Dano = %d)\n", nova_espada);
     printf("Deseja trocar sua espada (Dano = %d) por esta?\n1. Sim\n2. Não\n", player->dano_espada);
 

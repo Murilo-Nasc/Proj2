@@ -1,0 +1,3 @@
+Jogador: Raphael Campezzi / Nível: 3 / Andar: 5 / Morto por: Colosso Morto-Vivo em 23/10/2024
+Jogador: Joar / Nível: 2 / Andar: 4 / Morto por: Esqueleto em 23/10/2024
+Jogador: Davi Britto / Nível: 6 / Andar: 11 / Morto por: Goblin em 23/10/2024

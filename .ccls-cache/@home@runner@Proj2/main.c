@@ -15,7 +15,7 @@ int main(void) {
 
   printf("BEM VINDO AO RPG\n");
   while (1) {
-    printf("1. Começar Uma Nova Jornada\n2. Continuar Sua Jornada\n3. Sair\n");
+    printf("1. Começar Uma Nova Jornada\n2. Continuar Sua Jornada\n3. Ver Histórico\n4. Sair\n");
     scanf("%d", &opcao);
     scanf("%c", &lixo);
 
@@ -26,14 +26,17 @@ int main(void) {
 
       case 2:
         if (info_player.lvl == -1) {
-          printf("Não há jogo salvo.\n");
+          printf("Não há jogo salvo.\n\n");
           continue;
         }
         else {
           break;
         }
-
       case 3:
+        consultar_historico();
+        continue;
+      
+      case 4:
         printf("Saindo...\n");
         return 0;
 
@@ -52,7 +55,7 @@ int main(void) {
     // Andar de Boss
     if (info_player.andar % 5 == 0) {
       while (1) {
-        printf("\nVocê está entrando em um salão de boss! Deseja usar uma poção (%d)?\n", info_player.pocoes);
+        printf("\nVocê está entrando em um salão de boss! Deseja usar uma poção (%d)?\n1. Sim\n2. Não\n", info_player.pocoes);
         scanf("%d", &opcao);
         scanf("%c", &lixo);
         if (opcao == 1) {usar_pocao(&info_player); break;}

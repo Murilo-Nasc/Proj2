@@ -23,7 +23,7 @@ int main(void) {
       case 1:
         criar_player(&info_player);
         break;
-      
+
       case 2:
         if (info_player.lvl == -1) {
           printf("Não há jogo salvo.\n");
@@ -32,11 +32,11 @@ int main(void) {
         else {
           break;
         }
-      
+
       case 3:
         printf("Saindo...\n");
         return 0;
-      
+
       default:
         printf("Opção Inválida.\n");
         continue;
@@ -46,41 +46,65 @@ int main(void) {
 
   // EXPLORAÇÃO
   while (1) {
-    printf("\nANDAR %d\n\n", info_player.andar);
-    int total_encontros, morte = 0;
+    printf("\nANDAR %d\n", info_player.andar);
+    int total_encontros;
     int *encontros = gerar_encontros(&total_encontros);
-    
-    for (int i = 0; i < total_encontros; i++) {
-      if (encontros[i] == 1) {
-        combate(&info_player);
-        if (info_player.vida_atual <= 0) {
-          printf("Você morreu!\n");
-          morte = 1;
-          break;
+    // Andar de Boss
+    if (info_player.andar % 5 == 0) {
+      while (1) {
+        printf("\nVocê está entrando em um salão de boss! Deseja usar uma poção (%d)?\n", info_player.pocoes);
+        scanf("%d", &opcao);
+        scanf("%c", &lixo);
+        if (opcao == 1) {usar_pocao(&info_player); break;}
+        else if (opcao == 2) {printf("Nenhuma poção foi usada.\n"); break;}
+        else if (opcao != 2) {printf("Opção Inválida"); continue;}
+      }
+      criar_boss(&info_player);
+    }
+    // Andar Normal
+    else {
+      for (int i = 0; i < total_encontros; i++) {
+        if (encontros[i] == 1) {
+          combate(&info_player);
+          if (info_player.vida_atual <= 0) {
+            break;
+          }
+        } 
+        else if (encontros[i] == 2) {
+          bau(&info_player);
+          //Lógica do baú
         }
-      } 
-      else if (encontros[i] == 2) {
-        printf("Bau!\n");
-        //Lógica do baú
       }
     }
-    if (morte) {
+    
+    if (info_player.vida_atual <= 0) {
+      printf("Você morreu!\n");
       funcao_morte();
       break;
     }
+    
     printf("Andar Concluído!\n");
-    printf("Deseja continuar?\n1. Sim\n2. Não\n");
-    scanf("%d", &opcao);
-    if (opcao == 1) {
-      info_player.andar++;
-      printf("Seguindo ao próximo andar...\n");
+    while (1) {
+      printf("Deseja continuar?\n1. Sim\n2. Não\n");
+      scanf("%d", &opcao);
+      scanf("%c", &lixo);
+      if (opcao == 1) {
+        info_player.andar++;
+        printf("Seguindo ao próximo andar...\n");
+        break;
+      }
+      else if (opcao == 2) {
+        info_player.andar++;
+        salvar_player(&info_player);
+        printf("Adeus!");
+        break; 
+      }
+      else {
+        printf("Opção Inválida.\n");
+        continue;
+      }
     }
-    else if (opcao == 2) {
-      info_player.andar++;
-      salvar_player(&info_player);
-      printf("Adeus!");
-      break;
-    }
+    if (opcao == 2) {break;}
   }
 
   return 0;

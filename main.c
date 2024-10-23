@@ -51,6 +51,14 @@ int main(void) {
     int *encontros = gerar_encontros(&total_encontros);
     // Andar de Boss
     if (info_player.andar % 5 == 0) {
+      while (1) {
+        printf("\nVocê está entrando em um salão de boss! Deseja usar uma poção (%d)?\n", info_player.pocoes);
+        scanf("%d", &opcao);
+        scanf("%c", &lixo);
+        if (opcao == 1) {usar_pocao(&info_player); break;}
+        else if (opcao == 2) {printf("Nenhuma poção foi usada.\n"); break;}
+        else if (opcao != 2) {printf("Opção Inválida"); continue;}
+      }
       criar_boss(&info_player);
     }
     // Andar Normal
@@ -76,18 +84,27 @@ int main(void) {
     }
     
     printf("Andar Concluído!\n");
-    printf("Deseja continuar?\n1. Sim\n2. Não\n");
-    scanf("%d", &opcao);
-    if (opcao == 1) {
-      info_player.andar++;
-      printf("Seguindo ao próximo andar...\n");
+    while (1) {
+      printf("Deseja continuar?\n1. Sim\n2. Não\n");
+      scanf("%d", &opcao);
+      scanf("%c", &lixo);
+      if (opcao == 1) {
+        info_player.andar++;
+        printf("Seguindo ao próximo andar...\n");
+        break;
+      }
+      else if (opcao == 2) {
+        info_player.andar++;
+        salvar_player(&info_player);
+        printf("Adeus!");
+        break; 
+      }
+      else {
+        printf("Opção Inválida.\n");
+        continue;
+      }
     }
-    else if (opcao == 2) {
-      info_player.andar++;
-      salvar_player(&info_player);
-      printf("Adeus!");
-      break;
-    }
+    if (opcao == 2) {break;}
   }
 
   return 0;

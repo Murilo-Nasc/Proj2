@@ -335,7 +335,7 @@ void criar_boss(Player *player) {
       strcpy(inimigo.nome, "Colosso Morto-Vivo");
       inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 25 + 200) * poder);
       inimigo.ataque = 4 * poder;
-      inimigo.exp = (int)((rand() % 15 + 10) * poder);
+      inimigo.exp = (int)((rand() % 20 + 40) * poder);
       combate_colosso_mortovivo(inimigo, player);
       break;
   }
@@ -462,16 +462,7 @@ void combate_maquina_combate(Inimigo inimigo, Player *player) {
         continue;
     }
 
-    if (acao_inimigo == 1) {
-      ataque_inim(&inimigo, player, defesa_player);
-    } else if (acao_inimigo == 2) {
-      printf("O %s defendeu!\n", inimigo.nome);
-    }
     
-    if (player->vida_atual <= 0) {
-      printf("\nVocê foi derrotado pelo %s!\n", inimigo.nome);
-      break;
-    }
     
     if (inimigo.vida_atual <= 0) {
       printf("\nVocê derrotou a %s!\n", inimigo.nome);
@@ -485,7 +476,13 @@ void combate_maquina_combate(Inimigo inimigo, Player *player) {
       bau(player);
       break;
     }
-
+    
+    if (acao_inimigo == 1) {
+      ataque_inim(&inimigo, player, defesa_player);
+    } else if (acao_inimigo == 2) {
+      printf("O %s defendeu!\n", inimigo.nome);
+    }
+    
     if (player->vida_atual <= 0) {
       printf("\nVocê foi derrotado pelo %s!\n", inimigo.nome);
       break;
@@ -555,17 +552,7 @@ void combate_colosso_mortovivo(Inimigo inimigo, Player *player) {
         continue;
     }
 
-    if (acao_inimigo == 1) {
-      ataque_inim(&inimigo, player, defesa_player);
-      if (frenesi) {ataque_inim(&inimigo, player, defesa_player);}
-    } else if (acao_inimigo == 2) {
-      printf("O %s defendeu!\n", inimigo.nome);
-    }
-
-    if (player->vida_atual <= 0) {
-      printf("\nVocê foi derrotado pelo %s!\n", inimigo.nome);
-      break;
-    }
+    
 
     if (inimigo.vida_atual <= 0 && frenesi == 0) {
       inimigo.vida_atual += inimigo.vida_max * 0.5;
@@ -583,12 +570,18 @@ void combate_colosso_mortovivo(Inimigo inimigo, Player *player) {
       bau(player);
       break;
     }
+    
+    if (acao_inimigo == 1) {
+      ataque_inim(&inimigo, player, defesa_player);
+      if (frenesi) {ataque_inim(&inimigo, player, defesa_player);}
+    } else if (acao_inimigo == 2) {
+      printf("O %s defendeu!\n", inimigo.nome);
+    }
 
     if (player->vida_atual <= 0) {
       printf("\nVocê foi derrotado pelo %s!\n", inimigo.nome);
       break;
     }
-
     
   }
 }

@@ -50,7 +50,13 @@ int main(void) {
     int total_encontros, morte = 0;
     int *encontros = gerar_encontros(&total_encontros);
 
-    for (int i = 0; i < total_encontros; i++) {
+    // Andar de Boss
+    if ((info_player.andar) % 5 == 0) {
+      criar_boss(&info_player);
+    }
+    // Andar Comum
+    else {
+      for (int i = 0; i < total_encontros; i++) {
       if (encontros[i] == 1) {
         combate(&info_player);
         if (info_player.vida_atual <= 0) {
@@ -64,6 +70,7 @@ int main(void) {
         //Lógica do baú
       }
     }
+    
     if (morte) {
       funcao_morte();
       break;
@@ -71,6 +78,8 @@ int main(void) {
     printf("Andar Concluído!\n");
     printf("Deseja continuar?\n1. Sim\n2. Não\n");
     scanf("%d", &opcao);
+    }
+
     if (opcao == 1) {
       info_player.andar++;
       printf("Seguindo ao próximo andar...\n");

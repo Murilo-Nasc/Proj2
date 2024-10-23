@@ -53,7 +53,7 @@ void criar_player(Player *info_player) {
   info_player->vida_max = 50;
   info_player->vida_atual = 50;
   info_player->lvl = 1;
-  info_player->exp_max = 100;
+  info_player->exp_max = 120;
   info_player->exp_atual = 0;
   info_player->ataque = 5;
   info_player->andar = 1;
@@ -294,6 +294,8 @@ void bau(Player *player){
 
 }
 
+
+// Upar de Nível
 void upar_lvl(Player *player) {
   player->lvl++;
   player->exp_atual -= player->exp_max;
@@ -302,4 +304,104 @@ void upar_lvl(Player *player) {
   player->vida_atual = player->vida_max;
   player->ataque += 1;
   printf("\nParabéns! Você subiu para o nível %d!\n", player->lvl);
+}
+
+
+// BOSS
+
+
+// Criar Boss
+void criar_boss(Player *player) {
+  Inimigo inimigo;
+  int tipo = 1;
+  double poder = pow(1.05, player->andar);
+
+  switch (tipo) {
+    case 1: // Criatura do Abismo
+      strcpy(inimigo.nome, "Criatura do Abismo");
+      inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 25 + 100) * poder);
+      inimigo.ataque = 2 * poder;
+      inimigo.exp = (int)((rand() % 20 + 40) * poder);
+      combate_criatura_abismo(inimigo, player);
+      break;
+    case 2: // Máquina de Combate
+      strcpy(inimigo.nome, "Máquina de Combate");
+      inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 25 + 100) * poder);
+      inimigo.ataque = 3 * poder;
+      inimigo.exp = (int)((rand() % 10 + 10) * poder);
+      break;
+    case 3: // Apóstolo
+      strcpy(inimigo.nome, "Apóstolo");
+      inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 25 + 100) * poder);
+      inimigo.ataque = 6 * poder;
+      inimigo.exp = (int)((rand() % 15 + 10) * poder);
+      break;
+  }
+}
+
+void combate_criatura_abismo(Inimigo inimigo, Player *player) {
+  int ataque_max = 20 + pow(1.05, player->andar);
+  float variacao_ataque = inimigo.ataque;
+  
+  printf("\nVocê encontrou um chefão: A Criatura do Abismo!\n");
+
+  while (1) {
+    printf("\nSua vida: %.2f/%.2f\n", player->vida_atual, player->vida_max);
+    printf("Vida da %s: %.2f/%.2f\n", inimigo.nome, inimigo.vida_atual, inimigo.vida_max);
+    printf("\nEscolha uma ação:\n");
+    printf("1. Atacar\n");
+    printf("2. Defender\n");
+    printf("3. Usar Poção\n");
+
+    int acao, acao_inimigo, defesa_player = 0;
+    char lixo;
+    scanf("%d", &acao);
+    scanf("%c", &lixo);
+
+    switch (acao) {
+      case 1:
+        atacar(player, &inimigo, acao_inimigo);
+        break;
+      case 2:
+        defesa_player = 1;
+        printf("Você se defendeu!\n");
+        break;
+      case 3:
+        if (player->pocoes > 0) {
+          usar_pocao(player);
+          break;
+        } else {
+          printf("Você não tem poções!\n");
+          continue;
+        }
+
+      default:
+        printf("Ação inválida! Tente novamente.\n");
+        continue;
+    }
+
+    if (inimigo.vida_atual <= 0) {
+      printf("\nVocê derrotou a %s!\n", inimigo.nome);
+      printf("EXP ganho: %d\n", inimigo.exp);
+      player->exp_atual += inimigo.exp;
+      if (player->exp_atual >= player->exp_max) {
+        upar_lvl(player);
+      } 
+      printf("\nEXP atual: %.2f/%.2f\n", player->exp_atual, player->exp_max);
+      break;
+    }
+
+    ataque_inim(&inimigo, player, defesa_player);
+
+    if (variacao_ataque < ataque_max) {
+      variacao_ataque = variacao_ataque * 1.10;
+      inimigo.ataque = (int)(variacao_ataque);
+      printf("A criatura do abismo está crescendo... (ataque aumentado)!\n");
+    }
+      
+    if (player->vida_atual <= 0) {
+      printf("\nVocê foi derrotado pelo %s!\n", inimigo.nome);
+      break;
+    }
+  }
 }

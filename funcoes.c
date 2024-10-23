@@ -120,7 +120,7 @@ void combate(Player *player) {
     printf("\nEscolha uma ação:\n");
     printf("1. Atacar\n");
     printf("2. Defender\n");
-    printf("3. Usar Poção\n");
+    printf("3. Usar Poção (%d)\n", player->pocoes);
 
     int acao, acao_inimigo, defesa_player = 0;
     char lixo;
@@ -194,7 +194,7 @@ void ataque_inim(Inimigo *inimigo, Player *player, int defesa_player) {
     dano_inimigo = (int)(dano_inimigo / 1.6);
   }
   player->vida_atual -= dano_inimigo;
-  printf("O %s atacou você e causou %d de dano!\n", inimigo->nome, dano_inimigo);
+  printf("O/A %s atacou você e causou %d de dano!\n", inimigo->nome, dano_inimigo);
 }
 
 
@@ -265,10 +265,10 @@ void bau(Player *player){
   char lixo;
   printf("\nVocê encontrou um baú!\n");
   item = rand() % 10 + 1;
-  if (item > 0 && item <= 7) {
+  if (item > 0 && item <= 6) {
     printf("Você encontrou uma poção de cura!\n");
     player->pocoes++;
-  } else if (item <= 10 && item > 7) {
+  } else if (item <= 10 && item > 6) {
     nova_espada = (int)(rand() % 2 + 4) * pow(1.05, player->andar);
     printf("Você encontrou uma espada! (Dano = %d)\n", nova_espada);
     printf("Deseja trocar sua espada (Dano = %d) por esta?\n1. Sim\n2. Não\n", player->dano_espada);
@@ -313,7 +313,7 @@ void upar_lvl(Player *player) {
 // Criar Boss
 void criar_boss(Player *player) {
   Inimigo inimigo;
-  int tipo = 2;
+  int tipo = rand() % 3 + 1;
   double poder = pow(1.05, player->andar);
 
   switch (tipo) {
@@ -331,11 +331,12 @@ void criar_boss(Player *player) {
       inimigo.exp = (int)((rand() % 20 + 40) * poder);
       combate_maquina_combate(inimigo, player);
       break;
-    case 3: // Apóstolo
-      strcpy(inimigo.nome, "Apóstolo");
-      inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 25 + 100) * poder);
-      inimigo.ataque = 6 * poder;
+    case 3: // Colosso Morto-Vivo
+      strcpy(inimigo.nome, "Colosso Morto-Vivo");
+      inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 25 + 200) * poder);
+      inimigo.ataque = 4 * poder;
       inimigo.exp = (int)((rand() % 15 + 10) * poder);
+      combate_colosso_mortovivo(inimigo, player);
       break;
   }
 }
@@ -354,7 +355,7 @@ void combate_criatura_abismo(Inimigo inimigo, Player *player) {
     printf("\nEscolha uma ação:\n");
     printf("1. Atacar\n");
     printf("2. Defender\n");
-    printf("3. Usar Poção\n");
+    printf("3. Usar Poção (%d)\n", player->pocoes);
 
     int acao, acao_inimigo, defesa_player = 0;
     char lixo;
@@ -425,7 +426,7 @@ void combate_maquina_combate(Inimigo inimigo, Player *player) {
     printf("\nEscolha uma ação:\n");
     printf("1. Atacar\n");
     printf("2. Defender\n");
-    printf("3. Usar Poção\n");
+    printf("3. Usar Poção (%d)\n", player->pocoes);
 
     int acao, acao_inimigo, defesa_player = 0;
     char lixo;
@@ -502,5 +503,92 @@ void combate_maquina_combate(Inimigo inimigo, Player *player) {
       aquecimento = rand() % 3 + 2;
       printf("A Máquina esfriou!\n");
     }
+  }
+}
+
+
+// Combate do Colosso Morto-Vivo
+void combate_colosso_mortovivo(Inimigo inimigo, Player *player) {
+  int frenesi = 0;
+
+  printf("\nVocê encontrou um chefão: O Colosso Morto-Vivo!\n");
+
+  while (1) {
+    printf("\nSua vida: %.2f/%.2f\n", player->vida_atual, player->vida_max);
+    printf("Vida da %s: %.2f/%.2f\n", inimigo.nome, inimigo.vida_atual, inimigo.vida_max);
+    printf("\nEscolha uma ação:\n");
+    printf("1. Atacar\n");
+    printf("2. Defender\n");
+    printf("3. Usar Poção (%d)\n", player->pocoes);
+
+    int acao, acao_inimigo, defesa_player = 0;
+    char lixo;
+    scanf("%d", &acao);
+    scanf("%c", &lixo);
+
+    if (frenesi) {
+      acao_inimigo = 1;
+    } 
+    else {
+      acao_inimigo = rand() % 2 + 1; // Escolhe entre atacar (1) ou defender (2)
+    }
+
+    switch (acao) {
+      case 1:
+        atacar(player, &inimigo, acao_inimigo);
+        break;
+      case 2:
+        defesa_player = 1;
+        printf("Você se defendeu!\n");
+        break;
+      case 3:
+        if (player->pocoes > 0) {
+          usar_pocao(player);
+          break;
+        } else {
+          printf("Você não tem poções!\n");
+          continue;
+        }
+
+      default:
+        printf("Ação inválida! Tente novamente.\n");
+        continue;
+    }
+
+    if (acao_inimigo == 1) {
+      ataque_inim(&inimigo, player, defesa_player);
+      if (frenesi) {ataque_inim(&inimigo, player, defesa_player);}
+    } else if (acao_inimigo == 2) {
+      printf("O %s defendeu!\n", inimigo.nome);
+    }
+
+    if (player->vida_atual <= 0) {
+      printf("\nVocê foi derrotado pelo %s!\n", inimigo.nome);
+      break;
+    }
+
+    if (inimigo.vida_atual <= 0 && frenesi == 0) {
+      inimigo.vida_atual += inimigo.vida_max * 0.5;
+      frenesi = 1;
+      printf("\nO Colosso Morto-Vivo reviveu e está em frenesi!\n");
+    } else if (inimigo.vida_atual <= 0 && frenesi == 1) {
+      printf("\nVocê derrotou a %s!\n", inimigo.nome);
+      printf("EXP ganho: %d\n", inimigo.exp);
+      player->exp_atual += inimigo.exp;
+      if (player->exp_atual >= player->exp_max) {
+        upar_lvl(player);
+      } 
+      printf("\nEXP atual: %.2f/%.2f\n", player->exp_atual, player->exp_max);
+      bau(player);
+      bau(player);
+      break;
+    }
+
+    if (player->vida_atual <= 0) {
+      printf("\nVocê foi derrotado pelo %s!\n", inimigo.nome);
+      break;
+    }
+
+    
   }
 }

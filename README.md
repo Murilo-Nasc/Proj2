@@ -17,11 +17,11 @@ Este é um jogo de RPG simples desenvolvido em C, onde o jogador pode criar um p
 
 - Linguagem C
 - Bibliotecas padrão: 
-  - **stdio.h:** Usada para entrada e saída, permitindo interações com o usuário através de `printf` e `scanf`.
-  - **string.h:** Utilizada para manipulação de strings, essencial na criação e gerenciamento do personagem e inimigos.
-  - **stdlib.h:** Empregada para alocação de memória e geração de números aleatórios, fundamental para a lógica de combate e eventos do jogo.
-  - **time.h:** Utilizada para semear a geração de números aleatórios, garantindo diversidade em cada execução do jogo.
-  - **math.h:** Usada para funções matemáticas, como cálculos de dano e vida, essenciais para a mecânica do combate.
+  - *`stdio.h:`* Usada para entrada e saída, permitindo interações com o usuário através de `printf` e `scanf`.
+  - *`string.h:`* Utilizada para manipulação de strings, essencial na criação e gerenciamento do personagem e inimigos.
+  - *`stdlib.h:`* Empregada para alocação de memória e geração de números aleatórios, fundamental para a lógica de combate e eventos do jogo.
+  - *`time.h:`* Utilizada para semear a geração de números aleatórios, garantindo diversidade em cada execução do jogo.
+  - *`math.h:`* Usada para funções matemáticas, como cálculos de dano e vida, essenciais para a mecânica do combate.
 
 ## Compilação
 

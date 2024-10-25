@@ -135,37 +135,40 @@ void combate(Player *player) {
         break;
       case 2:
         defesa_player = 1;
-        printf("Você se defendeu!\n");
+        printf("\nVocê se defendeu!\n");
         break;
       case 3:
         if (player->pocoes > 0) {
           usar_pocao(player);
           break;
         } else {
-          printf("Você não tem poções!\n");
+          printf("\nVocê não tem poções!\n");
           continue;
         }
 
       default:
-        printf("Ação inválida! Tente novamente.\n");
+        printf("\nAção inválida! Tente novamente.\n");
         continue;
     }
 
     if (inimigo_atual.vida_atual <= 0) {
       printf("\nVocê derrotou o %s!\n", inimigo_atual.nome);
-      printf("EXP ganho: %d\n", inimigo_atual.exp);
+      printf("\nEXP ganho: %d\n", inimigo_atual.exp);
       player->exp_atual += inimigo_atual.exp;
       if (player->exp_atual >= player->exp_max) {
         upar_lvl(player);
       } 
-      printf("\nEXP atual: %.2f/%.2f\n", player->exp_atual, player->exp_max);
+      printf("EXP atual: %.2f/%.2f\n", player->exp_atual, player->exp_max);
+      printf("\nAperte Enter para prosseguir: \n");
+      getchar();
+      printf("~-~-~-~-~-~-~-~-~-~-~-~-\n");
       break;
     }
 
     if (acao_inimigo == 1) {
       ataque_inim(&inimigo_atual, player, defesa_player);
     } else if (acao_inimigo == 2) {
-      printf("O %s defendeu!\n", inimigo_atual.nome);
+      printf("\nO %s defendeu!\n", inimigo_atual.nome);
     }
 
     if (player->vida_atual <= 0) {
@@ -184,7 +187,7 @@ void atacar(Player *jogador, Inimigo *inimigo, int acao_inimigo) {
     dano_jogador = (int)(dano_jogador / 1.5);
   }
   inimigo->vida_atual -= dano_jogador;
-  printf("Você atacou o %s e causou %d de dano!\n", inimigo->nome, dano_jogador);
+  printf("\nVocê atacou o %s e causou %d de dano!\n", inimigo->nome, dano_jogador);
 }
 
 
@@ -195,7 +198,7 @@ void ataque_inim(Inimigo *inimigo, Player *player, int defesa_player) {
     dano_inimigo = (int)(dano_inimigo / 1.6);
   }
   player->vida_atual -= dano_inimigo;
-  printf("O/A %s atacou você e causou %d de dano!\n", inimigo->nome, dano_inimigo);
+  printf("\nO/A %s atacou você e causou %d de dano!\n", inimigo->nome, dano_inimigo);
 }
 
 
@@ -206,7 +209,7 @@ void usar_pocao(Player *player) {
   if (player->vida_atual > player->vida_max) {
     player->vida_atual = player->vida_max;
   }
-  printf("Você usou uma poção e recuperou vida! Vida atual: %.2f/%.2f\n", player->vida_atual, player->vida_max);
+  printf("\nVocê usou uma poção e recuperou vida! Vida atual: %.2f/%.2f\n", player->vida_atual, player->vida_max);
 }
 
 
@@ -266,32 +269,33 @@ void bau(Player *player){
   printf("\nVocê encontrou um baú!\n");
   item = rand() % 10 + 1;
   if (item > 0 && item <= 6) {
-    printf("Você encontrou uma poção de cura!\n");
-    printf("\nAperte Enter para prosseguir: \n");
+    printf("\nDentro dele há uma poção de cura!\n");
+    printf("\nAperte Enter para pegá-la e prosseguir: \n");
     getchar();
+    printf("~-~-~-~-~-~-~-~-~-~-~-~-\n");
     player->pocoes++;
   } else if (item <= 10 && item > 6) {
     nova_espada = (int)(rand() % 2 + 4) * pow(1.05, player->andar);
-    printf("Você encontrou uma espada! (Dano = %d)\n", nova_espada);
-    printf("Deseja trocar sua espada (Dano = %d) por esta?\n1. Sim\n2. Não\n", player->dano_espada);
+    printf("\nDentro dele há uma espada! (Dano = %d)\n", nova_espada);
+    printf("\nDeseja trocar sua espada (Dano = %d) por esta?\n1. Sim\n2. Não\n", player->dano_espada);
 
     while (1) {
       scanf("%d", &opcao);
       scanf("%c", &lixo);
       if (opcao == 1) {
         player->dano_espada = nova_espada;
-        printf("Espada trocada com sucesso!\n");
+        printf("\nEspada trocada com sucesso!\n");
         break;
       }
       else if (opcao == 2) {
-        printf("Espada mantida!\n");
+        printf("\nEspada mantida!\n");
         break;
       }
       else {
-        printf("Opção inválida!\n");
+        printf("\nOpção inválida!\n");
       }
     }
-
+    printf("\n~-~-~-~-~-~-~-~-~-~-~-~-\n");
   }
 
 }
@@ -305,9 +309,7 @@ void upar_lvl(Player *player) {
   player->vida_max += 5;
   player->vida_atual = player->vida_max;
   player->ataque += 1;
-  printf("\nParabéns! Você subiu para o nível %d!\n", player->lvl);
-  printf("\nAperte Enter para prosseguir: \n");
-  getchar();
+  printf("\nParabéns! Você subiu para o nível %d!\n\n", player->lvl);
 }
 
 
@@ -330,14 +332,14 @@ void criar_boss(Player *player) {
       break;
     case 2: // Máquina de Combate
       strcpy(inimigo.nome, "Máquina de Combate");
-      inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 25 + 150) * poder);
+      inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 25 + 125) * poder);
       inimigo.ataque = 4 * poder;
       inimigo.exp = (int)((rand() % 20 + 40) * poder);
       combate_maquina_combate(inimigo, player);
       break;
     case 3: // Colosso Morto-Vivo
       strcpy(inimigo.nome, "Colosso Morto-Vivo");
-      inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 25 + 200) * poder);
+      inimigo.vida_atual = inimigo.vida_max = (int)((rand() % 25 + 175) * poder);
       inimigo.ataque = 4 * poder;
       inimigo.exp = (int)((rand() % 20 + 40) * poder);
       combate_colosso_mortovivo(inimigo, player);
@@ -350,7 +352,7 @@ void criar_boss(Player *player) {
 void combate_criatura_abismo(Inimigo inimigo, Player *player) {
   int ataque_max = 20 + pow(1.05, player->andar);
   float variacao_ataque = inimigo.ataque;
-  
+
   printf("\nVocê encontrou um chefão: A Criatura do Abismo!\n");
 
   while (1) {
@@ -372,30 +374,33 @@ void combate_criatura_abismo(Inimigo inimigo, Player *player) {
         break;
       case 2:
         defesa_player = 1;
-        printf("Você se defendeu!\n");
+        printf("\nVocê se defendeu!\n");
         break;
       case 3:
         if (player->pocoes > 0) {
           usar_pocao(player);
           break;
         } else {
-          printf("Você não tem poções!\n");
+          printf("\nVocê não tem poções!\n");
           continue;
         }
 
       default:
-        printf("Ação inválida! Tente novamente.\n");
+        printf("\nAção inválida! Tente novamente.\n");
         continue;
     }
 
     if (inimigo.vida_atual <= 0) {
       printf("\nVocê derrotou a %s!\n", inimigo.nome);
-      printf("EXP ganho: %d\n", inimigo.exp);
+      printf("\nEXP ganho: %d\n", inimigo.exp);
       player->exp_atual += inimigo.exp;
       if (player->exp_atual >= player->exp_max) {
         upar_lvl(player);
       } 
-      printf("\nEXP atual: %.2f/%.2f\n", player->exp_atual, player->exp_max);
+      printf("EXP atual: %.2f/%.2f\n", player->exp_atual, player->exp_max);
+      printf("Aperte Enter para prosseguir: \n");
+      getchar();
+      printf("~-~-~-~-~-~-~-~-~-~-~-~-\n");
       bau(player);
       bau(player);
       break;
@@ -406,9 +411,9 @@ void combate_criatura_abismo(Inimigo inimigo, Player *player) {
     if (variacao_ataque < ataque_max) {
       variacao_ataque = variacao_ataque * 1.10;
       inimigo.ataque = (int)(variacao_ataque);
-      printf("A criatura do abismo está crescendo... (ataque aumentado)!\n");
+      printf("\nA criatura do abismo está crescendo... (ataque aumentado)!\n");
     }
-      
+
     if (player->vida_atual <= 0) {
       printf("\nVocê foi derrotado pelo %s!\n", inimigo.nome);
       historico(player, inimigo.nome);
@@ -444,50 +449,53 @@ void combate_maquina_combate(Inimigo inimigo, Player *player) {
     else {
       acao_inimigo = rand() % 2 + 1; // Escolhe entre atacar (1) ou defender (2)
     }
-    
+
     switch (acao) {
       case 1:
         atacar(player, &inimigo, acao_inimigo);
         break;
       case 2:
         defesa_player = 1;
-        printf("Você se defendeu!\n");
+        printf("\nVocê se defendeu!\n");
         break;
       case 3:
         if (player->pocoes > 0) {
           usar_pocao(player);
           break;
         } else {
-          printf("Você não tem poções!\n");
+          printf("\nVocê não tem poções!\n");
           continue;
         }
 
       default:
-        printf("Ação inválida! Tente novamente.\n");
+        printf("\nAção inválida! Tente novamente.\n");
         continue;
     }
 
-    
-    
+
+
     if (inimigo.vida_atual <= 0) {
       printf("\nVocê derrotou a %s!\n", inimigo.nome);
-      printf("EXP ganho: %d\n", inimigo.exp);
+      printf("\nEXP ganho: %d\n", inimigo.exp);
       player->exp_atual += inimigo.exp;
       if (player->exp_atual >= player->exp_max) {
         upar_lvl(player);
       } 
-      printf("\nEXP atual: %.2f/%.2f\n", player->exp_atual, player->exp_max);
+      printf("EXP atual: %.2f/%.2f\n", player->exp_atual, player->exp_max);
+      printf("\nAperte Enter para prosseguir: \n");
+      getchar();
+      printf("~-~-~-~-~-~-~-~-~-~-~-~-\n");
       bau(player);
       bau(player);
       break;
     }
-    
+
     if (acao_inimigo == 1) {
       ataque_inim(&inimigo, player, defesa_player);
     } else if (acao_inimigo == 2) {
-      printf("O %s defendeu!\n", inimigo.nome);
+      printf("\nO %s defendeu!\n", inimigo.nome);
     }
-    
+
     if (player->vida_atual <= 0) {
       printf("\nVocê foi derrotado pelo %s!\n", inimigo.nome);
       historico(player, inimigo.nome);
@@ -498,13 +506,13 @@ void combate_maquina_combate(Inimigo inimigo, Player *player) {
     if (aquecimento == 0) {
       superaquecida = 1;
       inimigo.ataque *= 2.25; 
-      printf("A Máquina está superaquecida!\n");
+      printf("\nA Máquina está superaquecida!\n");
     }
     if (aquecimento == -2) {
       superaquecida = 0;
       inimigo.ataque /= 2;
       aquecimento = rand() % 3 + 2;
-      printf("A Máquina esfriou!\n");
+      printf("\nA Máquina esfriou!\n");
     }
   }
 }
@@ -542,23 +550,23 @@ void combate_colosso_mortovivo(Inimigo inimigo, Player *player) {
         break;
       case 2:
         defesa_player = 1;
-        printf("Você se defendeu!\n");
+        printf("\nVocê se defendeu!\n");
         break;
       case 3:
         if (player->pocoes > 0) {
           usar_pocao(player);
           break;
         } else {
-          printf("Você não tem poções!\n");
+          printf("\nVocê não tem poções!\n");
           continue;
         }
 
       default:
-        printf("Ação inválida! Tente novamente.\n");
+        printf("\nAção inválida! Tente novamente.\n");
         continue;
     }
 
-    
+
 
     if (inimigo.vida_atual <= 0 && frenesi == 0) {
       inimigo.vida_atual += inimigo.vida_max * 0.5;
@@ -566,22 +574,25 @@ void combate_colosso_mortovivo(Inimigo inimigo, Player *player) {
       printf("\nO Colosso Morto-Vivo reviveu e está em frenesi!\n");
     } else if (inimigo.vida_atual <= 0 && frenesi == 1) {
       printf("\nVocê derrotou a %s!\n", inimigo.nome);
-      printf("EXP ganho: %d\n", inimigo.exp);
+      printf("\nEXP ganho: %d\n", inimigo.exp);
       player->exp_atual += inimigo.exp;
       if (player->exp_atual >= player->exp_max) {
         upar_lvl(player);
       } 
-      printf("\nEXP atual: %.2f/%.2f\n", player->exp_atual, player->exp_max);
+      printf("EXP atual: %.2f/%.2f\n", player->exp_atual, player->exp_max);
+      printf("\nAperte Enter para prosseguir: \n");
+      getchar();
+      printf("~-~-~-~-~-~-~-~-~-~-~-~-\n");
       bau(player);
       bau(player);
       break;
     }
-    
+
     if (acao_inimigo == 1) {
       ataque_inim(&inimigo, player, defesa_player);
       if (frenesi) {ataque_inim(&inimigo, player, defesa_player);}
     } else if (acao_inimigo == 2) {
-      printf("O %s defendeu!\n", inimigo.nome);
+      printf("\nO %s defendeu!\n", inimigo.nome);
     }
 
     if (player->vida_atual <= 0) {
@@ -589,7 +600,7 @@ void combate_colosso_mortovivo(Inimigo inimigo, Player *player) {
       historico(player, inimigo.nome);
       break;
     }
-    
+
   }
 }
 
@@ -612,6 +623,7 @@ void historico(Player *player, char inimigo[]){
 
 // Consultar histórico
 void consultar_historico(){
+  printf("\nHISTÓRICO DE PARTIDAS PASSADAS:\n\n");
   FILE *arquivo;
   arquivo = fopen("historico.txt", "r");
   if (arquivo == NULL) {

@@ -52,4 +52,5 @@ void combate_colosso_mortovivo(Inimigo inimigo, Player *player);
 // HISTÓRICO
 void historico(Player *player, char inimigo[]);
 void consultar_historico();
+
 #endif

@@ -13,7 +13,7 @@ int main(void) {
   carregar_player(&info_player);
 
 
-  printf("BEM VINDO AO RPG\n");
+  printf("-~ BEM VINDO AO RPG ~-\n\n");
   while (1) {
     printf("1. Começar Uma Nova Jornada\n2. Continuar Sua Jornada\n3. Ver Histórico\n4. Sair\n");
     scanf("%d", &opcao);
@@ -30,12 +30,13 @@ int main(void) {
           continue;
         }
         else {
+          printf("\nBem vindo de volta, %s!\n", info_player.nome);
           break;
         }
       case 3:
         consultar_historico();
         continue;
-      
+
       case 4:
         printf("Saindo...\n");
         return 0;
@@ -47,6 +48,7 @@ int main(void) {
     break;
   }
 
+  printf("\n~-~-~-~-~-~-~-~-~-~-~-~-\n");
   // EXPLORAÇÃO
   while (1) {
     printf("\nANDAR %d\n", info_player.andar);
@@ -79,21 +81,22 @@ int main(void) {
         }
       }
     }
-    
+
     if (info_player.vida_atual <= 0) {
-      printf("Você morreu!\n");
+      printf("\nVocê morreu!\n");
       funcao_morte();
       break;
     }
-    
-    printf("Andar Concluído!\n");
+
+    printf("\nAndar Concluído!\n\n");
     while (1) {
       printf("Deseja continuar?\n1. Sim\n2. Não\n");
       scanf("%d", &opcao);
       scanf("%c", &lixo);
       if (opcao == 1) {
         info_player.andar++;
-        printf("Seguindo ao próximo andar...\n");
+        printf("\nSeguindo ao próximo andar...\n");
+        printf("\n~-~-~-~-~-~-~-~-~-~-\n");
         break;
       }
       else if (opcao == 2) {
